@@ -31,7 +31,7 @@ authRouter.post("/signin", basicAuth, (req, res, next) => {
       token: req.user.token,
       role: req.user.role,
     };
-    res.status(200).json(user);
+    res.status(200).json(req.user);
   } catch (e) {
     next(e.message);
   }
@@ -43,8 +43,8 @@ authRouter.get("/profile", bearerAuth, async (req, res, next) => {
       id: req.user.id,
       token: req.user.token,
       myRole: req.user.role,
-    };
-    res.status(200).json(user);
+  };
+  res.status(200).json(req.user);
   } catch (e) {
     next(e); // Pass the error to the next middleware/error handler
   }
