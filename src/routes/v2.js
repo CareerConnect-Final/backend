@@ -228,7 +228,7 @@ async function sendFriendRequest(req, res) {
       sender_id: userId,
       username: username,
       receiver_id: friendId,
-      message:`${username} sent you a friend request`
+      message: `${username} sent you a friend request`,
     });
     return res
       .status(200)
@@ -860,6 +860,32 @@ async function viewMessages(req, res) {
     });
   }
 }
+
+router.get("/conversations", bearerAuth, getAllConversations);
+
+async function getAllConversations(req, res) {
+  try {
+    const userId = req.user.dataValues.id;
+
+    // Find all unique conversations for the logged-in user
+    const conversations = await chat.findAll({
+      attributes: [
+        [Sequelize.fn("DISTINCT", Sequelize.col("sender_id")), "sender_id"],
+        [Sequelize.fn("DISTINCT", Sequelize.col("receiver_id")), "receiver_id"],
+      ],
+      where: {
+        [Sequelize.Op.or]: [{ sender_id: userId }, { receiver_id: userId }],
+      },
+    });
+
+    return res.status(200).json(conversations);
+  } catch (error) {
+    console.error("Error retrieving conversations:", error);
+    return res.status(500).json({
+      message: "An error occurred while retrieving conversations.",
+    });
+  }
+}
 //------------------------Chat aljamal
 //------------------------------------------------------
 
@@ -937,7 +963,7 @@ router.post("/applyjob/:id", bearerAuth, applyJob);
 async function applyJob(req, res, next) {
   try {
     // check if the users exist
-    const userCv= await cv.getCv(req.user.id)
+    const userCv = await cv.getCv(req.user.id);
     const jobid = req.params.id;
     const job = await jobs.get(jobid);
     const companyid = job.dataValues.user_id;
@@ -973,7 +999,7 @@ async function applyJob(req, res, next) {
       // Create a new Join request entry in the JoinRequest table
       await applyjob.create({
         job_id: jobid,
-        cv_link:userCv.cv_link,
+        cv_link: userCv.cv_link,
         applyer_id: applyerid,
         company_name: company.username,
       });
