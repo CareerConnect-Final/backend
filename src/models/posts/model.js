@@ -6,6 +6,7 @@ const postsModel = (sequelize, DataTypes) =>
     content: { type: DataTypes.STRING },
     photo: { type: DataTypes.STRING },
     username:{type:DataTypes.STRING},
+    profilePicture:{type:DataTypes.STRING},
     status: {
       type: DataTypes.ENUM("public", "private"),
       required: false,

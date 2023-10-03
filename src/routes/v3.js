@@ -118,8 +118,10 @@ async function handleCommentsCreate(req, res) {
   let obj = req.body;
   let userId = req.user.id;
   let username = req.user.username;
+  let profilePicture = req.user.profilePicture; 
   obj.user_id = userId;
   obj.username = username;
+  obj.profilePicture = profilePicture;
   let newRecord = await jobcomments.create(obj);
   res.status(201).json(newRecord);
 }
@@ -139,8 +141,10 @@ async function handleCreate(req, res) {
   let obj = req.body;
   let userId = req.user.id;
   let username = req.user.username;
+  let profilePicture = req.user.profilePicture;
   obj.user_id = userId;
   obj.company_name = username;
+  obj.profilePicture = profilePicture;
   let newRecord = await jobs.create(obj);
   res.status(201).json(newRecord);
 }

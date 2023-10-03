@@ -176,6 +176,7 @@ router.post("/send-friend-request/:id", bearerAuth, sendFriendRequest);
 async function sendFriendRequest(req, res) {
   const userId = req.user.id;
   let username = req.user.username;
+  let profilePicture = req.user.profilePicture; //////////
 
   const friendId = req.params.id;
   try {
@@ -227,6 +228,7 @@ async function sendFriendRequest(req, res) {
     await friendRequests.create({
       sender_id: userId,
       username: username,
+      profilePicture: profilePicture,  /////////////
       receiver_id: friendId,
       message: `${username} sent you a friend request`,
     });
@@ -1267,8 +1269,10 @@ async function handleCreate(req, res) {
   let obj = req.body;
   let userId = req.user.id;
   let username = req.user.username;
+  let profilePicture = req.user.profilePicture;
   obj.user_id = userId;
   obj.username = username;
+  obj.profilePicture = profilePicture;
   console.log(obj);
   let newRecord = await req.model.create(obj);
   res.status(201).json(newRecord);

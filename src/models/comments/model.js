@@ -8,6 +8,7 @@ const commentsModel = (sequelize, DataTypes) =>
       allowNull: false,
     },
     username:{type:DataTypes.STRING},
+    profilePicture:{type:DataTypes.STRING},
     post_id: {
       type: DataTypes.INTEGER,
       allowNull: false,

@@ -11,6 +11,7 @@ sequelize.define("jobcomments",{
         type:DataTypes.INTEGER
     },
     username:{type:DataTypes.STRING},
+    profilePicture:{type:DataTypes.STRING},
     job_id:{
         type:DataTypes.INTEGER
     }
