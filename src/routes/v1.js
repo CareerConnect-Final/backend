@@ -5,6 +5,9 @@ const dataModules = require("../models");
 const {
   users,
   posts,
+  reels,
+  reelsModel,
+  reelcomments,
   jobcomments,
   jobs,
   comments,
@@ -30,6 +33,7 @@ router.delete("/:model/:id", handleDelete);
 router.get("/jobs/:id/jobcomments", jobComments);
 router.get("/posts/:id/comments", postComments);
 router.get("/users/:id/:model", userRecords);
+router.get("/reels/:id/reelcomments", reelComments);
 
 async function userRecords(req, res) {
   const userId = parseInt(req.params.id);
@@ -41,6 +45,11 @@ async function jobComments(req, res) {
   const jobId = parseInt(req.params.id);
   let jcomments = await jobs.getUserPosts(jobId, jobcomments.model);
   res.status(200).json(jcomments);
+}
+async function reelComments(req, res) {
+  const reelId = parseInt(req.params.id);
+  let reelcomments = await posts.getUserPosts(reelId, reelcomments.model);
+  res.status(200).json(reelcomments);
 }
 async function postComments(req, res) {
   const postId = parseInt(req.params.id);

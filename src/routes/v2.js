@@ -17,6 +17,9 @@ const {
   users,
   posts,
   postsModel,
+  reels,
+  reelsModel,
+  reelcomments,
   jobcomments,
   jobs,
   comments,
@@ -1216,6 +1219,7 @@ router.delete("/:model/:id", bearerAuth, checkId, handleDelete);
 router.get("/jobs/:id/jobcomments", bearerAuth, jobComments);
 router.get("/posts/:id/comments", bearerAuth, postComments);
 router.get("/posts/:id/likes", bearerAuth, postLikes);
+router.get("/reels/:id/reelcomments", bearerAuth, reelComments);
 
 async function jobComments(req, res) {
   const jobId = parseInt(req.params.id);
@@ -1223,6 +1227,11 @@ async function jobComments(req, res) {
   res.status(200).json(jcomments);
 }
 
+async function reelComments(req, res) {///
+  const reelId = parseInt(req.params.id);
+  let reelcomments = await reels.getUserPosts(reelId, reelcomments.model);
+  res.status(200).json(reelcomments);
+}
 async function postComments(req, res) {
   const postId = parseInt(req.params.id);
   let pcomments = await posts.getUserPosts(postId, comments.model);
@@ -1273,6 +1282,7 @@ async function handleCreate(req, res) {
   obj.user_id = userId;
   obj.username = username;
   obj.profilePicture = profilePicture;
+  // obj.photo = req.body.photo;///
   console.log(obj);
   let newRecord = await req.model.create(obj);
   res.status(201).json(newRecord);
