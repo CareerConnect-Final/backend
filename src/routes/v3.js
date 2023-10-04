@@ -5,6 +5,8 @@ const {
   jobs,
   jobcomments,
   joblike,
+  joblikenon,
+  jobcommentsnon,
   applyjobCollection,
 } = require("../models/index");
 const bearerAuth = require("../auth/middleware/bearer");
@@ -12,7 +14,7 @@ const permissions = require("../auth/middleware/checkrole");
 const checkId = require("../auth/middleware/checkId");
 const jwt = require("jsonwebtoken");
 const { where } = require("sequelize");
-const dataModules = { jobs };
+const dataModules = { jobs ,jobcomments,joblike};
 const router2 = express.Router();
 
 const likes = require("../models/likes/model01");
@@ -39,7 +41,9 @@ router2.get("/job/:id/appliers", bearerAuth, jobapplyer);
 router2.post("/likes", bearerAuth, handleCreateLikes);
 router2.get("/likes", bearerAuth, handleGetAllLikes);
 router2.put("/:model/:id", bearerAuth, checkId, permissions(), handleUpdate);
+router2.put("/motasem/:id", bearerAuth, checkId, permissions(), handleUpdateComment);
 router2.delete("/:model/:id", bearerAuth, checkId, permissions(), handleDelete);
+// router2.delete("/likes/:id", bearerAuth, checkId, permissions(), handleDeleteLikes);
 
 async function handleGetAll(req, res) {
   let allRecords = await jobs.get();
@@ -158,12 +162,32 @@ async function handleUpdate(req, res) {
   let updatedRecord = await req.model.update(id, obj);
   res.status(200).json(updatedRecord);
 }
+async function handleUpdateComment(req, res) {
+  const id = req.params.id;
+  const obj = req.body;
+  try {
+    // Assuming `jobComments` is your Sequelize model
+    const updatedRecord = await jobComments.update(obj, {
+      where: { id: id }
+    });
+    res.status(200).json(updatedRecord);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while updating the record.' });
+  }
+}
+
 
 async function handleDelete(req, res) {
   let id = req.params.id;
   let deletedRecord = await req.model.delete(id);
   res.status(200).json(deletedRecord);
 }
+// async function handleDeleteLikes(req, res) {
+//     let id = req.params.id;
+//     let deletedRecord = await joblike.delete(id);
+//     res.status(200).json("deleted successfully");
+// }
 
 async function jobapplyer(req, res) {
   const jobId = parseInt(req.params.id);
