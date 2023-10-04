@@ -37,12 +37,16 @@ router2.get("/jobs/:id/jobcomments", bearerAuth, jobComments);
 router2.get("/jobs/:id/likes", bearerAuth, postLikes);
 router2.get("/job/:id/appliers", bearerAuth, jobapplyer);
 router2.post("/likes", bearerAuth, handleCreateLikes);
-router2.get("/likes", bearerAuth, handleGetAll);
+router2.get("/likes", bearerAuth, handleGetAllLikes);
 router2.put("/:model/:id", bearerAuth, checkId, permissions(), handleUpdate);
 router2.delete("/:model/:id", bearerAuth, checkId, permissions(), handleDelete);
 
 async function handleGetAll(req, res) {
   let allRecords = await jobs.get();
+  res.status(200).json(allRecords);
+}
+async function handleGetAllLikes(req, res) {
+  let allRecords = await joblike.get();
   res.status(200).json(allRecords);
 }
 
