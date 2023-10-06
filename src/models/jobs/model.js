@@ -7,7 +7,7 @@ const JobsModel = (sequelize, DataTypes) =>
       allowNull: false,
     },
     company_name: { type: DataTypes.STRING },
-    profilePicture:{type:DataTypes.STRING},
+    profilePicture:{type:DataTypes.TEXT},
     job_title: {
       type: DataTypes.STRING(255),
       set(value) {
