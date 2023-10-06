@@ -7,7 +7,7 @@ const friendRequests = (sequelize, DataTypes) => {
       allowNull: false,
     },
     username: { type: DataTypes.STRING },
-    profilePicture:{type:DataTypes.STRING},
+    profilePicture:{type:DataTypes.TEXT},
     receiver_id: {
       type: DataTypes.INTEGER,
       allowNull: false,

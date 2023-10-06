@@ -3,7 +3,7 @@
 const CV = (sequelize, DataTypes) =>
   sequelize.define("CV ", {
     user_id: { type: DataTypes.INTEGER, allowNull: false },
-    cv_link: { type: DataTypes.STRING },
+    cv_link: { type: DataTypes.TEXT },
     full_name: { type: DataTypes.STRING, allowNull: false },
     job_title: { type: DataTypes.STRING },
     job_field: { type: DataTypes.STRING },
@@ -20,8 +20,8 @@ const CV = (sequelize, DataTypes) =>
     languages: { type: DataTypes.STRING }, //, allowNull: false
     references: { type: DataTypes.STRING }, //, allowNull: false
     interests_hobbies: { type: DataTypes.STRING }, //, allowNull: false
-    linkedin_profile: { type: DataTypes.STRING }, //, allowNull: false
-    github_profile: { type: DataTypes.STRING }, //, allowNull: false
+    linkedin_profile: { type: DataTypes.TEXT }, //, allowNull: false
+    github_profile: { type: DataTypes.TEXT }, //, allowNull: false
   });
 
 module.exports = CV;

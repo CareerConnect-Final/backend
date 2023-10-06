@@ -8,7 +8,7 @@ const friendsModel = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    profilePicture:{type:DataTypes.STRING},
+    profilePicture:{type:DataTypes.TEXT},
   });
 };
 
