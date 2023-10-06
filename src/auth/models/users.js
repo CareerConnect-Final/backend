@@ -21,6 +21,7 @@ const userModel = (sequelize, DataTypes) => {
     country: { type: DataTypes.STRING },
     city: { type: DataTypes.STRING },
     phoneNumber: { type: DataTypes.STRING },
+    companyName: { type: DataTypes.STRING },
     address: { type: DataTypes.STRING },
     gender: { type: DataTypes.STRING },
     profilePicture: { type: DataTypes.STRING },
