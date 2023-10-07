@@ -5,9 +5,12 @@ const {
   jobs,
   jobcomments,
   joblike,
+  users,
   joblikenon,
   jobcommentsnon,
   applyjobCollection,
+  followedCompanies,
+  followers
 } = require("../models/index");
 const bearerAuth = require("../auth/middleware/bearer");
 const permissions = require("../auth/middleware/checkrole");
@@ -44,11 +47,31 @@ router2.put("/:model/:id", bearerAuth, checkId, permissions(), handleUpdate);
 router2.put("/motasem/:id", bearerAuth, checkId, permissions(), handleUpdateComment);
 router2.delete("/:model/:id", bearerAuth, checkId, permissions(), handleDelete);
 // router2.delete("/likes/:id", bearerAuth, checkId, permissions(), handleDeleteLikes);
+router2.get("/followdcompanies", bearerAuth,handleGetFollowing );
 
 async function handleGetAll(req, res) {
   let allRecords = await jobs.get();
   res.status(200).json(allRecords);
 }
+async function handleGetFollowing(req, res) {
+  // const receiverid = req.params.id;
+  const senderid = req.user.id;
+
+
+  const obj= await followers.findAll({
+    where: {
+      sender_id: senderid,
+    },
+  });
+  obj.map(async(item)=>{
+      res.status(200).json(obj);
+
+  })
+
+
+}
+
+
 async function handleGetAllLikes(req, res) {
   let allRecords = await joblike.get();
   res.status(200).json(allRecords);

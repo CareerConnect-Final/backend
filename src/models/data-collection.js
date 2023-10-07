@@ -72,6 +72,13 @@ async getJobCity(job_city,model){
   })
   return record
 }
+async getIdForSender(job_city,model){
+  let record= await this.model.findAll({
+    where:{job_city},
+    include: model
+  })
+  return record
+}
 
 async getCVbyTitle(job_title,model){
   let record= await this.model.findAll({

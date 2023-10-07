@@ -24,6 +24,7 @@ const FriendsModel = require("./friends/model.js");
 const employees = require("./employees/employees.model.js");
 const employeeUserModel = require("./employees/EmployeeUser.model.js");
 const chatRoom = require("./chatRoom/chatRoom.model.js");
+const followed = require('../models/followedCompanies/model.js')
 const POSTGRESS_URI =
   process.env.NODE_ENV === "test"
     ? "sqlite::memory:"
@@ -56,6 +57,7 @@ const joinrequest = joinRequestsModel(sequelize, DataTypes);
 const followers = followersModel(sequelize, DataTypes);
 const applyjob = applyJobModel(sequelize, DataTypes);
 const favorites = favoritesModel(sequelize, DataTypes);
+const followedCompanies = followed(sequelize, DataTypes);
 ///////////////////////////////////////////// Notification Model
 const notification = notificationModel(sequelize, DataTypes);
 notification.belongsTo(user, { foreignKey: "sender_id", as: "sender" });
@@ -221,6 +223,16 @@ user.hasMany(followers, {
   as: "received the follow",
 });
 
+////////////// followed companies Anas
+followedCompanies.belongsTo(user, { foreignKey: "sender_id", as: "sender" });
+user.hasMany(followedCompanies, { foreignKey: "sender_id", as: "make follow" });
+
+followedCompanies.belongsTo(user, { foreignKey: "receiver_id", as: "receiver" });
+user.hasMany(followedCompanies, {
+  foreignKey: "receiver_id",
+  as: "received follow",
+});
+
 //----------- followers Aljamal
 //------------------------------------
 
@@ -266,6 +278,7 @@ module.exports = {
   cv: new Collection(cv),
   joinRequests: joinrequest,
   followers: followers,
+  followedCompanies: followedCompanies,
   postsModel: posts,
   reelsModel: reels,
   user: user,
