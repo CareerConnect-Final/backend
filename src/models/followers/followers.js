@@ -11,6 +11,7 @@ const followers = (sequelize, DataTypes) =>
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    company_name: { type: DataTypes.STRING },
   });
 
 module.exports = followers;

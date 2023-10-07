@@ -63,10 +63,10 @@ async function handleGetFollowing(req, res) {
       sender_id: senderid,
     },
   });
-  obj.map(async(item)=>{
+
       res.status(200).json(obj);
 
-  })
+
 
 
 }
