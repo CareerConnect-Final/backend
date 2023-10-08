@@ -32,6 +32,7 @@ router2.param("model", (req, res, next) => {
   }
 });
 
+router2.get("/followdcompanies", bearerAuth,handleGetFollowing );
 router2.get("/jobs", bearerAuth, handleGetAll);
 router2.get("/jobs/:id", bearerAuth, handleGetOne);
 router2.get("/jobtitle/:title", bearerAuth, handleGetTitle);
@@ -43,11 +44,12 @@ router2.get("/jobs/:id/likes", bearerAuth, postLikes);
 router2.get("/job/:id/appliers", bearerAuth, jobapplyer);
 router2.post("/likes", bearerAuth, handleCreateLikes);
 router2.get("/likes", bearerAuth, handleGetAllLikes);
-router2.put("/:model/:id", bearerAuth, checkId, permissions(), handleUpdate);
-router2.put("/motasem/:id", bearerAuth, checkId, permissions(), handleUpdateComment);
+router2.delete("/likes/:id", bearerAuth, handleDeleteLikes);
+router2.delete("/jobcomments/:id", bearerAuth, handleDeleteComments);
+router2.put("/:model/:id", bearerAuth,  handleUpdate);
+// router2.put("/motasem/:id", bearerAuth, checkId, permissions(), handleUpdateComment);
 router2.delete("/:model/:id", bearerAuth, checkId, permissions(), handleDelete);
 // router2.delete("/likes/:id", bearerAuth, checkId, permissions(), handleDeleteLikes);
-router2.get("/followdcompanies", bearerAuth,handleGetFollowing );
 
 async function handleGetAll(req, res) {
   let allRecords = await jobs.get();
@@ -206,11 +208,18 @@ async function handleDelete(req, res) {
   let deletedRecord = await req.model.delete(id);
   res.status(200).json(deletedRecord);
 }
-// async function handleDeleteLikes(req, res) {
-//     let id = req.params.id;
-//     let deletedRecord = await joblike.delete(id);
-//     res.status(200).json("deleted successfully");
-// }
+async function handleDeleteLikes(req, res) {
+    let id = req.params.id;
+    let deletedRecord = await joblike.delete(id)
+    // res.status(200).json("deleted successfully");
+    res.status(200).json(deletedRecord);
+}
+async function handleDeleteComments(req, res) {
+    let id = req.params.id;
+    let deletedRecord = await jobcomments.delete(id)
+    // res.status(200).json("deleted successfully");
+    res.status(200).json(deletedRecord);
+}
 
 async function jobapplyer(req, res) {
   const jobId = parseInt(req.params.id);
