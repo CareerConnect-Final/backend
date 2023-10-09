@@ -1356,8 +1356,8 @@ async function handleGetAllCV(req, res) {
 
 async function handleGetOneCV(req, res) {
   if (req.user.role != "user" || req.params.id == req.user.id) {
-    const id = req.params.id;
-    let theRecord = await cv.get(id);
+    const user_id = req.params.id;
+    let theRecord = await cv.get(user_id);
     res.status(200).json(theRecord.cv_link);
   } else {
     res.status(200).json("you dont have Permission");
