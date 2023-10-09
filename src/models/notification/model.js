@@ -5,8 +5,11 @@ const NotificationsModel = (sequelize, DataTypes) =>
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    username:{
-      type:DataTypes.STRING
+    username: {
+      type: DataTypes.STRING,
+    },
+    profilePicture: {
+      type: DataTypes.STRING,
     },
     receiver_id: {
       type: DataTypes.INTEGER,
@@ -16,12 +19,15 @@ const NotificationsModel = (sequelize, DataTypes) =>
       type: DataTypes.ENUM(
         "new_message",
         "friend_request",
-        "post_like",
-        "post_comment",
-        "job_post_like",
-        "job_post_comment"
+        "post",
+        "job_post",
+        "job_post_apply"
       ),
       required: true,
+    },
+    post_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     message: {
       type: DataTypes.STRING(255),
@@ -35,11 +41,6 @@ const NotificationsModel = (sequelize, DataTypes) =>
     //   type: DataTypes.DATE,
     //   allowNull: false,
     //   defaultValue: DataTypes.NOW,
-    // },
-    // is_read: {
-    //   type: DataTypes.BOOLEAN,
-    //   allowNull: false,
-    //   defaultValue: false,
     // },
   });
 module.exports = NotificationsModel;
