@@ -338,7 +338,7 @@ io.on("connection", (socket) => {
     const senderSocketId = userSockets[senderUserId];
 
     if (receiverSocketId && senderUserId !== receiverUserId) {
-      const notification = notificationModel.create({
+      const notification = await notificationModel.create({
         sender_id: senderUserId,
         username: data.senderName,
         profilePicture: data.profilePicture,
@@ -359,7 +359,7 @@ io.on("connection", (socket) => {
       });
     } else {
       console.log(`Receiver with user ID ${receiverUserId} is not connected.`);
-      const notification = notificationModel.create({
+      const notification = await notificationModel.create({
         sender_id: senderUserId,
         username: data.senderName,
         profilePicture: data.profilePicture,
