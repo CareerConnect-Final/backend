@@ -1,8 +1,8 @@
 "use strict";
 //-------------------------------------------------------------------------------- followers requests table aljamal
 
-const followers = (sequelize, DataTypes) =>
-  sequelize.define("followers", {
+const followed = (sequelize, DataTypes) =>
+  sequelize.define("followedcompanies", {
     receiver_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -11,9 +11,6 @@ const followers = (sequelize, DataTypes) =>
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    company_name: { type: DataTypes.STRING },
   });
 
-module.exports = followers;
-
-//-------------------------------------------------------------------------------- followers requests table aljamal
+module.exports = followed;

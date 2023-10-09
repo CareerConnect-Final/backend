@@ -680,6 +680,7 @@ async function makeFollow(req, res, next) {
       await followers.create({
         sender_id: senderid,
         receiver_id: receiverid,
+        company_name:receiver.username
       });
 
       return res

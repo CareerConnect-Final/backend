@@ -12,6 +12,7 @@ const v3Routes = require("./routes/v3.js");
 const notFoundHandler = require("./error-handlers/404.js");
 const errorHandler = require("./error-handlers/500.js");
 const socketIo = require("socket.io");
+
 /* ------------------------- handle recieved tocken from client , this to be removed later */
 const jwt = require("jsonwebtoken");
 const SECRET = process.env.SECRET || "secretstring";
@@ -29,13 +30,22 @@ const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 
+// const io = new Server(server, {
+//   cors: {
+//     origin: `http://localhost:5173`,
+//     methods: ["GET", "POST"],
+//   },
+//   pingTimeout: 60000, // 60 seconds, adjust as needed
+//   pingInterval: 25000, // 25 seconds, adjust as needed
+// });
 const io = new Server(server, {
   cors: {
-    origin: `http://localhost:${process.env.PORT}/`,
+    origin: `http://localhost:5173`,
     methods: ["GET", "POST"],
   },
+  pingTimeout: 60000,
+  pingInterval: 25000,
 });
-
 // --------------------------
 app.use((req, res, next) => {
   const allowedOrigins = [
@@ -55,7 +65,6 @@ app.use((req, res, next) => {
 
   next();
 });
-
 
 // app.use((req, res, next) => {
 //   const allowedOrigins = [
@@ -87,6 +96,7 @@ app.use(express.urlencoded({ extended: true }));
 
 /* ------------------------saving each connected user id with there socket id-------------------- */
 const userSockets = {};
+
 io.on("connection", (socket) => {
   socket.on("sendToken", ({ token }) => {
     const parsedToken = jwt.verify(token, SECRET);
@@ -94,6 +104,14 @@ io.on("connection", (socket) => {
     console.log(
       `Received token from the client, User with ID ${userId} connected: welcome ${parsedToken.username}`
     );
+    const existingSocketId = userSockets[userId];
+    // Store the user's socket ID in Redis
+
+    if (existingSocketId) {
+      // Handle reconnection, e.g., updating userSockets
+      console.log(`User with ID ${userId} reconnected.`);
+    }
+
     userSockets[userId] = socket.id;
   });
   /*---------------------- handle friend request notification - mohannad ------------------------ */
@@ -311,9 +329,52 @@ io.on("connection", (socket) => {
     }
   });
   /*---------------------- handle message and message notification for compayn- mohannad ------------------------ */
+  /*------------------------------- */
+  socket.on("likePost", async (data) => {
+    console.log(" a like is coming ", data);
+    const senderUserId = data.senderId;
+    const receiverUserId = data.receiverId;
+    const receiverSocketId = userSockets[receiverUserId];
+    const senderSocketId = userSockets[senderUserId];
 
+    if (receiverSocketId && senderUserId !== receiverUserId) {
+      const notification = await notificationModel.create({
+        sender_id: senderUserId,
+        username: data.senderName,
+        profilePicture: data.profilePicture,
+        receiver_id: receiverUserId,
+        message: data.message,
+        action_type: "post",
+        post_id: data.postId,
+        is_seen: false,
+      });
+
+      io.to(receiverSocketId).emit("newNotification", {
+        sender_id: senderUserId,
+        senderName: data.senderName,
+        profilePicture: data.profilePicture,
+        message: data.message,
+        postId: data.postId,
+        notificationId: notification.id,
+      });
+    } else {
+      console.log(`Receiver with user ID ${receiverUserId} is not connected.`);
+      const notification = await notificationModel.create({
+        sender_id: senderUserId,
+        username: data.senderName,
+        profilePicture: data.profilePicture,
+        receiver_id: receiverUserId,
+        message: data.message,
+        action_type: "post",
+        post_id: data.postId,
+        is_seen: false,
+      });
+    }
+  });
+
+  /*-------------------------------- */
   // Handle disconnection if needed
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
     console.log("User disconnected:", socket.id);
     const disconnectedUserId = Object.keys(userSockets).find(
       (userId) => userSockets[userId] === socket.id
