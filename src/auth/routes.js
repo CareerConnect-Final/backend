@@ -28,10 +28,10 @@ authRouter.post("/signup", async (req, res, next) => {
     // Store a user-copy on Chat Engine!
     // Docs at rest.chatengine.io
 
-    const r = await axios.post("https://api.chatengine.io/users/", userdata, {
-      headers: { "Private-Key": "f9e3dcfd-9150-43a1-87ca-35cb59afa8bd" },
-    });
-    console.log(r);
+    // const r = await axios.post("https://api.chatengine.io/users/", userdata, {
+    //   headers: { "Private-Key": "f9e3dcfd-9150-43a1-87ca-35cb59afa8bd" },
+    // });
+    // console.log(r);
     res.status(201).json(output);
   } catch (e) {
     next(e.message);
@@ -55,14 +55,14 @@ authRouter.post("/signin", basicAuth, async (req, res, next) => {
     // Fetch this user from Chat Engine in this project!
     // Docs at rest.chatengine.io
 
-    const r = await axios.get("https://api.chatengine.io/users/me/", {
-      headers: {
-        "Project-ID": "97427ae2-0fef-4442-844f-334b554421da",
-        "User-Name": userdata.username,
-        "User-Secret": userdata.secret,
-      },
-    });
-    res.status(r.status).json(r.data);
+    // const r = await axios.get("https://api.chatengine.io/users/me/", {
+    //   headers: {
+    //     "Project-ID": "97427ae2-0fef-4442-844f-334b554421da",
+    //     "User-Name": userdata.username,
+    //     "User-Secret": userdata.secret,
+    //   },
+    // });
+    // res.status(r.status).json(r.data);
     res.status(200).json(req.user);
   } catch (e) {
     next(e.message);
