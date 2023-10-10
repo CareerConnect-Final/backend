@@ -11,13 +11,13 @@ const JobsModel = (sequelize, DataTypes) =>
     job_title: {
       type: DataTypes.STRING(255),
       set(value) {
-        this.setDataValue("job_title", value.toUpperCase());
+        this.setDataValue("job_title", value.toLowerCase());
       },
     },
     job_city: {
       type: DataTypes.STRING(255),
       set(value) {
-        this.setDataValue("job_city", value.toUpperCase());
+        this.setDataValue("job_city", value.toLowerCase());
       },
     },
     job_field: {
