@@ -351,7 +351,7 @@ io.on("connection", (socket) => {
 
       io.to(receiverSocketId).emit("newNotification", {
         sender_id: senderUserId,
-        senderName: data.senderName,
+        username: data.senderName,
         profilePicture: data.profilePicture,
         message: data.message,
         postId: data.postId,
