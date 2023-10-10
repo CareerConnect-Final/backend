@@ -374,7 +374,7 @@ io.on("connection", (socket) => {
 
   /*-------------------------------- */
   socket.on("commentPost", async (data) => {
-    console.log(" a like is coming ", data);
+    console.log(" a comment is coming ", data);
     const senderUserId = data.senderId;
     const receiverUserId = data.receiverId;
     const receiverSocketId = userSockets[receiverUserId];
