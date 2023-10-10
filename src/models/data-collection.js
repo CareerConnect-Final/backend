@@ -80,6 +80,15 @@ async getIdForSender(job_city,model){
   return record
 }
 
+async getOneCV(user_id,model){////////////
+  let data= await this.model.findAll({
+    where:{user_id},
+    include: model
+  })
+  let record = data[data.length-1]
+  return record
+}
+
 async getCVbyTitle(job_title,model){
   let record= await this.model.findAll({
     where:{job_title},
