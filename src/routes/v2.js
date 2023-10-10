@@ -61,6 +61,98 @@ async function userNotifications(req, res) {
   res.status(200).json(notifications);
 }
 
+router.delete("/notifications/:notificationId", bearerAuth, deleteNotification);
+async function deleteNotification(req, res) {
+  const userId = req.user.id;
+  const notificationId = req.params.notificationId;
+
+  try {
+    // Check if the notification belongs to the authenticated user
+    const notification = await notificationModel.findOne({
+      where: {
+        id: notificationId,
+        receiver_id: userId,
+      },
+    });
+
+    if (!notification) {
+      return res.status(404).json({ message: "Notification not found." });
+    }
+
+    // Delete the notification
+    await notification.destroy();
+
+    return res
+      .status(200)
+      .json({ message: "Notification deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting notification:", error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred while deleting the notification." });
+  }
+}
+router.delete("/notifications", bearerAuth, deleteAllNotifications);
+async function deleteAllNotifications(req, res) {
+  const userId = req.user.id;
+
+  try {
+    // Delete all notifications for the authenticated user
+    await notificationModel.destroy({
+      where: {
+        receiver_id: userId,
+      },
+    });
+
+    return res
+      .status(200)
+      .json({ message: "All notifications deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting all notifications:", error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred while deleting all notifications." });
+  }
+}
+router.put(
+  "/notifications/:notificationId/seen",
+  bearerAuth,
+  markNotificationAsSeen
+);
+async function markNotificationAsSeen(req, res) {
+  const userId = req.user.id;
+  const notificationId = req.params.notificationId;
+
+  try {
+    // Check if the notification belongs to the authenticated user
+    const notification = await notificationModel.findOne({
+      where: {
+        id: notificationId,
+        receiver_id: userId,
+      },
+    });
+
+    if (!notification) {
+      return res.status(404).json({ message: "Notification not found." });
+    }
+
+    // Update the status of the notification to "seen"
+    notification.is_seen = true;
+    await notification.save();
+
+    return res
+      .status(200)
+      .json({ message: "Notification marked as seen successfully." });
+  } catch (error) {
+    console.error("Error marking notification as seen:", error);
+    return res
+      .status(500)
+      .json({
+        message: "An error occurred while marking the notification as seen.",
+      });
+  }
+}
+
 router.get("/favoriteposts", bearerAuth, getFavoritePosts);
 async function getFavoritePosts(req, res) {
   try {
@@ -231,7 +323,7 @@ async function sendFriendRequest(req, res) {
     await friendRequests.create({
       sender_id: userId,
       username: username,
-      profilePicture: profilePicture,  /////////////
+      profilePicture: profilePicture, /////////////
       receiver_id: friendId,
       message: `${username} sent you a friend request`,
     });
@@ -680,7 +772,7 @@ async function makeFollow(req, res, next) {
       await followers.create({
         sender_id: senderid,
         receiver_id: receiverid,
-        company_name:receiver.username
+        company_name: receiver.username,
       });
 
       return res
@@ -1228,7 +1320,8 @@ async function jobComments(req, res) {
   res.status(200).json(jcomments);
 }
 
-async function reelComments(req, res) {///
+async function reelComments(req, res) {
+  ///
   const reelId = parseInt(req.params.id);
   let reelcomments = await reels.getUserPosts(reelId, reelcomments.model);
   res.status(200).json(reelcomments);
