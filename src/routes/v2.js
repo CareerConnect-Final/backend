@@ -145,11 +145,9 @@ async function markNotificationAsSeen(req, res) {
       .json({ message: "Notification marked as seen successfully." });
   } catch (error) {
     console.error("Error marking notification as seen:", error);
-    return res
-      .status(500)
-      .json({
-        message: "An error occurred while marking the notification as seen.",
-      });
+    return res.status(500).json({
+      message: "An error occurred while marking the notification as seen.",
+    });
   }
 }
 
@@ -1057,31 +1055,85 @@ router.get("/companychat", bearerAuth, async (req, res) => {
 });
 //------------------------------------------------------
 //----------------------- applying jobs aljamal
-router.post("/applyjob/:id", bearerAuth, applyJob);
+// router.post("/applyjob/:id", bearerAuth, applyJob);
+// async function applyJob(req, res, next) {
+//   try {
+//     // check if the users exist
+//     const userCv = await cv.getCv(req.user.id);
+//     const jobid = req.params.id;
+//     const job = await jobs.get(jobid);
+//     const companyid = job.dataValues.user_id;
+//     const company = await users.get(companyid);
+//     console.log(
+//       "----------------------------------------------------------->",
+//       company.username
+//     );
+
+//     if (req.user.role !== "company") {
+//       // check the id of the applyer for the job
+
+//       // check if the users exist
+//       const applyerid = req.user.dataValues.id; //from tocken
+//       const applyer = await users.get(applyerid);
+//       // console.log(applyer.dataValues.)
+//       if (!company || !applyer) {
+//         return res.status(404).json("User not found.");
+//       }
+//       // check if the request is already sent so that it doesnet dublicate
+//       const existingApply = await applyjob.findOne({
+//         where: {
+//           job_id: jobid,
+//           applyer_id: applyerid,
+//         },
+//       });
+
+//       if (existingApply) {
+//         return res.status(400).json("You are already apply to this job");
+//       }
+
+//       // create the new Join request
+//       // Create a new Join request entry in the JoinRequest table
+//       await applyjob.create({
+//         job_id: jobid,
+//         cv_link: userCv.cv_link,
+//         applyer_id: applyerid,
+//         company_name: company.username,
+//       });
+
+//       return res.status(200).json("You applied to this job successfully.");
+//     } else {
+//       return res.status(200).json("you don't have Permission");
+//     }
+//   } catch (error) {
+//     next("an error occured, the Join request failed");
+//   }
+// }
+
 async function applyJob(req, res, next) {
   try {
-    // check if the users exist
-    const userCv = await cv.getCv(req.user.id);
-    const jobid = req.params.id;
-    const job = await jobs.get(jobid);
-    const companyid = job.dataValues.user_id;
-    const company = await users.get(companyid);
-    console.log(
-      "----------------------------------------------------------->",
-      company.username
-    );
-
+    // Check if the user is applying for a job as a non-company user
     if (req.user.role !== "company") {
-      // check the id of the applyer for the job
+      // Extract the job ID from the route parameters
+      const jobid = req.params.id;
 
-      // check if the users exist
-      const applyerid = req.user.dataValues.id; //from tocken
+      // Check if the job and company exist
+      const job = await jobs.get(jobid);
+      const companyid = job.dataValues.user_id;
+      const company = await users.get(companyid);
+
+      if (!company) {
+        return res.status(404).json("Company not found.");
+      }
+
+      // Check if the user exists
+      const applyerid = req.user.dataValues.id; // Get the user ID from the token
       const applyer = await users.get(applyerid);
-      // console.log(applyer.dataValues.)
-      if (!company || !applyer) {
+
+      if (!applyer) {
         return res.status(404).json("User not found.");
       }
-      // check if the request is already sent so that it doesnet dublicate
+
+      // Check if the request is already sent to avoid duplication
       const existingApply = await applyjob.findOne({
         where: {
           job_id: jobid,
@@ -1090,24 +1142,28 @@ async function applyJob(req, res, next) {
       });
 
       if (existingApply) {
-        return res.status(400).json("You are already apply to this job");
+        return res.status(400).json("You have already applied to this job.");
       }
 
-      // create the new Join request
+      // Extract the CV link and other necessary data from the request body
+      const { cv_link } = req.body;
+
       // Create a new Join request entry in the JoinRequest table
       await applyjob.create({
         job_id: jobid,
-        cv_link: userCv.cv_link,
+        cv_link: cv_link,
         applyer_id: applyerid,
         company_name: company.username,
       });
 
       return res.status(200).json("You applied to this job successfully.");
     } else {
-      return res.status(200).json("you don't have Permission");
+      return res
+        .status(403)
+        .json("You don't have permission to apply as a company user.");
     }
   } catch (error) {
-    next("an error occured, the Join request failed");
+    next("An error occurred, the join request failed");
   }
 }
 

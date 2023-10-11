@@ -354,7 +354,7 @@ io.on("connection", (socket) => {
         username: data.senderName,
         profilePicture: data.profilePicture,
         message: data.message,
-        postId: data.postId,
+        post_id: data.postId,
         notificationId: notification.id,
       });
     } else {
@@ -374,6 +374,51 @@ io.on("connection", (socket) => {
 
   /*-------------------------------- */
   socket.on("commentPost", async (data) => {
+    console.log(" a comment is coming ", data);
+    const senderUserId = data.senderId;
+    const receiverUserId = data.receiverId;
+    const receiverSocketId = userSockets[receiverUserId];
+    const senderSocketId = userSockets[senderUserId];
+
+    if (receiverSocketId && senderUserId !== receiverUserId) {
+      const notification = await notificationModel.create({
+        sender_id: senderUserId,
+        username: data.senderName,
+        profilePicture: data.profilePicture,
+        receiver_id: receiverUserId,
+        message: data.message,
+        action_type: "post",
+        post_id: data.postId,
+        is_seen: false,
+      });
+
+      io.to(receiverSocketId).emit("newNotification", {
+        sender_id: senderUserId,
+        senderName: data.senderName,
+        profilePicture: data.profilePicture,
+        message: data.message,
+        postId: data.postId,
+        notificationId: notification.id,
+      });
+    } else {
+      console.log(`Receiver with user ID ${receiverUserId} is not connected.`);
+      const notification = await notificationModel.create({
+        sender_id: senderUserId,
+        username: data.senderName,
+        profilePicture: data.profilePicture,
+        receiver_id: receiverUserId,
+        message: data.message,
+        action_type: "post",
+        post_id: data.postId,
+        is_seen: false,
+      });
+    }
+  });
+
+  /*-------------------------------- */
+
+  /*-------------------------------- */
+  socket.on("jopApply", async (data) => {
     console.log(" a comment is coming ", data);
     const senderUserId = data.senderId;
     const receiverUserId = data.receiverId;
