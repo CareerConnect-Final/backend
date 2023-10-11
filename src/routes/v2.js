@@ -1307,6 +1307,7 @@ router.get("/applicationStatus/", bearerAuth, async (req, res) => {
         "interviewDate", // Include interview date
         "interviewLocation",
         "company_name",
+        "rejectionReason",
       ], // Include interview location], // Include the application ID and status
     });
 
@@ -1326,6 +1327,7 @@ router.get("/applicationStatus/", bearerAuth, async (req, res) => {
         status: application.status,
         interviewDate: application.interviewDate,
         interviewLocation: application.interviewLocation,
+        rejectionReason: application.rejectionReason,
       };
     });
 
