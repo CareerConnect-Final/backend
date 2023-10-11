@@ -155,7 +155,7 @@ io.on("connection", (socket) => {
   // -------- incoming friend request ---
 
   //-----------firend request handler ---
-  socket.on("friendRequestHandled", (data) => {
+  socket.on("friendRequestHandled", async (data) => {
     console.log(" friend request is handled and stored in database", data);
     const senderUserId = data.senderId;
     // Look up the receiver's socket ID using their user ID from the mapping
@@ -163,7 +163,7 @@ io.on("connection", (socket) => {
 
     if (senderSocketId) {
       // If the receiver's socket ID is found in the mapping, emit the friendRequestNotification event
-      const notification = notificationModel.create({
+      const notification = await notificationModel.create({
         sender_id: senderUserId,
         receiver_id: data.receiverId,
         message: data.message,
@@ -180,7 +180,7 @@ io.on("connection", (socket) => {
       console.log(`Receiver with user ID ${receiverUserId} is not connected.`);
       // Handle the case when the receiver is not currently connected (optional)
       // For example, you can store the notification in the database and deliver it when the receiver reconnects
-      const notification = notificationModel.create({
+      const notification = await notificationModel.create({
         sender_id: senderUserId,
         receiver_id: data.receiverId,
         message: data.message,
@@ -211,7 +211,7 @@ io.on("connection", (socket) => {
         console.log(
           `Receiver with user ID ${receiverUserId} is not connected.`
         );
-        notificationModel.create({
+        await notificationModel.create({
           sender_id: data.senderId,
           receiver_id: data.receiverId,
           message: data.message,
@@ -356,6 +356,7 @@ io.on("connection", (socket) => {
         message: data.message,
         post_id: data.postId,
         notificationId: notification.id,
+        action_type: notification.action_type,
       });
     } else {
       console.log(`Receiver with user ID ${receiverUserId} is not connected.`);
@@ -394,11 +395,12 @@ io.on("connection", (socket) => {
 
       io.to(receiverSocketId).emit("newNotification", {
         sender_id: senderUserId,
-        senderName: data.senderName,
+        username: data.senderName,
         profilePicture: data.profilePicture,
         message: data.message,
-        postId: data.postId,
+        post_id: data.postId,
         notificationId: notification.id,
+        action_type: notification.action_type,
       });
     } else {
       console.log(`Receiver with user ID ${receiverUserId} is not connected.`);
@@ -439,11 +441,12 @@ io.on("connection", (socket) => {
 
       io.to(receiverSocketId).emit("newNotification", {
         sender_id: senderUserId,
-        senderName: data.senderName,
+        username: data.senderName,
         profilePicture: data.profilePicture,
         message: data.message,
         post_id: data.postId,
         notificationId: notification.id,
+        action_type: notification.action_type,
       });
     } else {
       console.log(`Receiver with user ID ${receiverUserId} is not connected.`);
