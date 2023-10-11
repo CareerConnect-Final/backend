@@ -1298,7 +1298,7 @@ router.get("/applicationStatus/", bearerAuth, async (req, res) => {
         {
           model: jobsTable,
           as: "job",
-          attributes: ["job_title"],
+          attributes: ["job_title", "job_id"],
         },
       ],
       attributes: [
@@ -1321,6 +1321,7 @@ router.get("/applicationStatus/", bearerAuth, async (req, res) => {
       return {
         applicationId: application.id,
         company: application.company_name,
+        jobId: application.job.id,
         jobTitle: application.job.job_title,
         status: application.status,
         interviewDate: application.interviewDate,
