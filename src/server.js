@@ -418,8 +418,8 @@ io.on("connection", (socket) => {
   /*-------------------------------- */
 
   /*-------------------------------- */
-  socket.on("jopApply", async (data) => {
-    console.log(" a comment is coming ", data);
+  socket.on("applyJob", async (data) => {
+    console.log(" a job apply is coming ", data);
     const senderUserId = data.senderId;
     const receiverUserId = data.receiverId;
     const receiverSocketId = userSockets[receiverUserId];
@@ -432,8 +432,8 @@ io.on("connection", (socket) => {
         profilePicture: data.profilePicture,
         receiver_id: receiverUserId,
         message: data.message,
-        action_type: "post",
-        post_id: data.postId,
+        action_type: "job_post_apply",
+        post_id: data.jobPostId,
         is_seen: false,
       });
 
@@ -442,7 +442,7 @@ io.on("connection", (socket) => {
         senderName: data.senderName,
         profilePicture: data.profilePicture,
         message: data.message,
-        postId: data.postId,
+        post_id: data.postId,
         notificationId: notification.id,
       });
     } else {
@@ -453,8 +453,8 @@ io.on("connection", (socket) => {
         profilePicture: data.profilePicture,
         receiver_id: receiverUserId,
         message: data.message,
-        action_type: "post",
-        post_id: data.postId,
+        action_type: "job_post_apply",
+        post_id: data.jobPostId,
         is_seen: false,
       });
     }
