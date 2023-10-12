@@ -1178,7 +1178,6 @@ router.get("/applicants/:jobId", bearerAuth, async (req, res) => {
     const job = await jobsTable.findOne({
       where: {
         id: jobId,
-        user_id: req.user.id, // Make sure the requesting company owns the job
       },
     });
 
