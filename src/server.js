@@ -358,7 +358,6 @@ io.on("connection", (socket) => {
         notificationId: notification.id,
         action_type: notification.action_type,
       });
-      console.log(`emmmited to ${receiverUserId}`);
     } else {
       console.log(`Receiver with user ID ${receiverUserId} is not connected.`);
       const notification = await notificationModel.create({
@@ -419,48 +418,48 @@ io.on("connection", (socket) => {
   });
 
   /*-------------------------------- */
-  socket.on("HandleApplyJob", async (data) => {
-    console.log(" a job apply is handled ", data);
-    const senderUserId = data.senderId;
-    const receiverUserId = data.receiverId;
-    const receiverSocketId = userSockets[receiverUserId];
-    const senderSocketId = userSockets[senderUserId];
+  // socket.on("HandleApplyJob", async (data) => {
+  //   console.log(" a job apply is handled ", data);
+  //   const senderUserId = data.senderId;
+  //   const receiverUserId = data.receiverId;
+  //   const receiverSocketId = userSockets[receiverUserId];
+  //   const senderSocketId = userSockets[senderUserId];
 
-    if (receiverSocketId && senderUserId !== receiverUserId) {
-      // const notification = await notificationModel.create({
-      //   sender_id: senderUserId,
-      //   username: data.senderName,
-      //   profilePicture: data.profilePicture,
-      //   receiver_id: receiverUserId,
-      //   message: data.message,
-      //   action_type: "job_post_apply",
-      //   post_id: data.jobPostId,
-      //   is_seen: false,
-      // });
+  //   if (receiverSocketId && senderUserId !== receiverUserId) {
+  //     // const notification = await notificationModel.create({
+  //     //   sender_id: senderUserId,
+  //     //   username: data.senderName,
+  //     //   profilePicture: data.profilePicture,
+  //     //   receiver_id: receiverUserId,
+  //     //   message: data.message,
+  //     //   action_type: "job_post_apply",
+  //     //   post_id: data.jobPostId,
+  //     //   is_seen: false,
+  //     // });
 
-      io.to(receiverSocketId).emit("newNotification", {
-        sender_id: senderUserId,
-        username: data.senderName,
-        profilePicture: data.profilePicture,
-        message: data.message,
-        post_id: data.postId,
-        // notificationId: notification.id,
-        // action_type: notification.action_type,
-      });
-    } else {
-      console.log(`Receiver with user ID ${receiverUserId} is not connected.`);
-      // const notification = await notificationModel.create({
-      //   sender_id: senderUserId,
-      //   username: data.senderName,
-      //   profilePicture: data.profilePicture,
-      //   receiver_id: receiverUserId,
-      //   message: data.message,
-      //   action_type: "job_post_apply",
-      //   post_id: data.jobPostId,
-      //   is_seen: false,
-      // });
-    }
-  });
+  //     io.to(receiverSocketId).emit("newNotification", {
+  //       sender_id: senderUserId,
+  //       username: data.senderName,
+  //       profilePicture: data.profilePicture,
+  //       message: data.message,
+  //       post_id: data.postId,
+  //       // notificationId: notification.id,
+  //       // action_type: notification.action_type,
+  //     });
+  //   } else {
+  //     console.log(`Receiver with user ID ${receiverUserId} is not connected.`);
+  //     // const notification = await notificationModel.create({
+  //     //   sender_id: senderUserId,
+  //     //   username: data.senderName,
+  //     //   profilePicture: data.profilePicture,
+  //     //   receiver_id: receiverUserId,
+  //     //   message: data.message,
+  //     //   action_type: "job_post_apply",
+  //     //   post_id: data.jobPostId,
+  //     //   is_seen: false,
+  //     // });
+  //   }
+  // });
   /*-------------------------------- */
   socket.on("applyJob", async (data) => {
     console.log(" a job apply is coming ", data);
@@ -469,39 +468,45 @@ io.on("connection", (socket) => {
     const receiverSocketId = userSockets[receiverUserId];
     const senderSocketId = userSockets[senderUserId];
 
-    if (receiverSocketId && senderUserId !== receiverUserId) {
-      // const notification = await notificationModel.create({
-      //   sender_id: senderUserId,
-      //   username: data.senderName,
-      //   profilePicture: data.profilePicture,
-      //   receiver_id: receiverUserId,
-      //   message: data.message,
-      //   action_type: "job_post_apply",
-      //   post_id: data.jobPostId,
-      //   is_seen: false,
-      // });
+    try {
+      if (receiverSocketId && senderUserId !== receiverUserId) {
+        const notification = await notificationModel.create({
+          sender_id: senderUserId,
+          username: data.senderName,
+          profilePicture: data.profilePicture,
+          receiver_id: receiverUserId,
+          message: data.message,
+          action_type: "job_post_apply",
+          post_id: data.jobPostId,
+          is_seen: false,
+        });
 
-      io.to(receiverSocketId).emit("newNotification", {
-        sender_id: senderUserId,
-        username: data.senderName,
-        profilePicture: data.profilePicture,
-        message: data.message,
-        post_id: data.postId,
-        // notificationId: notification.id,
-        action_type: notification.action_type,
-      });
-    } else {
-      console.log(`Receiver with user ID ${receiverUserId} is not connected.`);
-      // const notification = await notificationModel.create({
-      //   sender_id: senderUserId,
-      //   username: data.senderName,
-      //   profilePicture: data.profilePicture,
-      //   receiver_id: receiverUserId,
-      //   message: data.message,
-      //   action_type: "job_post_apply",
-      //   post_id: data.jobPostId,
-      //   is_seen: false,
-      // });
+        io.to(receiverSocketId).emit("newNotification", {
+          sender_id: senderUserId,
+          username: data.senderName,
+          profilePicture: data.profilePicture,
+          message: data.message,
+          post_id: data.postId,
+          notificationId: notification.id,
+          action_type: notification.action_type,
+        });
+      } else {
+        console.log(
+          `Receiver with user ID ${receiverUserId} is not connected.`
+        );
+        const notification = await notificationModel.create({
+          sender_id: senderUserId,
+          username: data.senderName,
+          profilePicture: data.profilePicture,
+          receiver_id: receiverUserId,
+          message: data.message,
+          action_type: "job_post_apply",
+          post_id: data.jobPostId,
+          is_seen: false,
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   });
 

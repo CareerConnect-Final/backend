@@ -29,10 +29,10 @@ const NotificationsModel = (sequelize, DataTypes) =>
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    job_post_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
+    // job_post_id: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    // },
     message: {
       type: DataTypes.STRING(255),
       allowNull: false,
@@ -41,10 +41,10 @@ const NotificationsModel = (sequelize, DataTypes) =>
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    timestamp: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
+    // timestamp: {
+    //   type: DataTypes.DATE,
+    //   allowNull: false,
+    //   defaultValue: DataTypes.NOW,
+    // },
   });
 module.exports = NotificationsModel;
