@@ -29,10 +29,10 @@ const NotificationsModel = (sequelize, DataTypes) =>
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    // job_post_id: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    // },
+    job_post_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     message: {
       type: DataTypes.STRING(255),
       allowNull: false,

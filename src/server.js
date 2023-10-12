@@ -435,7 +435,7 @@ io.on("connection", (socket) => {
           receiver_id: receiverUserId,
           message: data.message,
           action_type: "job_post",
-          post_id: data.jobPostId,
+          job_post_id: data.jobPostId,
           is_seen: false,
         });
 
@@ -444,7 +444,7 @@ io.on("connection", (socket) => {
           username: data.senderName,
           profilePicture: data.profilePicture,
           message: data.message,
-          post_id: data.postId,
+          job_post_id: data.postId,
           notificationId: notification.id,
           action_type: notification.action_type,
         });
@@ -459,7 +459,7 @@ io.on("connection", (socket) => {
           receiver_id: receiverUserId,
           message: data.message,
           action_type: "job_post",
-          post_id: data.jobPostId,
+          job_post_id: data.jobPostId,
           is_seen: false,
         });
       }
@@ -484,7 +484,7 @@ io.on("connection", (socket) => {
           receiver_id: receiverUserId,
           message: data.message,
           action_type: "job_post",
-          post_id: data.jobPostId,
+          job_post_id: data.jobPostId,
           is_seen: false,
         });
 
@@ -493,7 +493,7 @@ io.on("connection", (socket) => {
           username: data.senderName,
           profilePicture: data.profilePicture,
           message: data.message,
-          post_id: data.postId,
+          job_post_id: data.postId,
           notificationId: notification.id,
           action_type: notification.action_type,
         });
@@ -508,7 +508,7 @@ io.on("connection", (socket) => {
           receiver_id: receiverUserId,
           message: data.message,
           action_type: "job_post",
-          post_id: data.jobPostId,
+          job_post_id: data.jobPostId,
           is_seen: false,
         });
       }
