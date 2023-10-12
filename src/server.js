@@ -358,6 +358,7 @@ io.on("connection", (socket) => {
         notificationId: notification.id,
         action_type: notification.action_type,
       });
+      console.log(`emmmited to ${receiverUserId}`);
     } else {
       console.log(`Receiver with user ID ${receiverUserId} is not connected.`);
       const notification = await notificationModel.create({
