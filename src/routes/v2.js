@@ -1171,11 +1171,6 @@ async function applyJob(req, res, next) {
 router.get("/applicants/:jobId", bearerAuth, async (req, res) => {
   try {
     // Check if the user is a company
-    if (req.user.role !== "company") {
-      return res
-        .status(403)
-        .json({ message: "You don't have permission to perform this action." });
-    }
 
     const jobId = req.params.jobId;
 
