@@ -21,7 +21,7 @@ const NotificationsModel = (sequelize, DataTypes) =>
         "friend_request",
         "post",
         "job_post",
-        "job_post_apply"
+        "job_postapp"
       ),
       required: true,
     },
