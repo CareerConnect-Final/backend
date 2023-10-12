@@ -337,7 +337,7 @@ io.on("connection", (socket) => {
     const receiverSocketId = userSockets[receiverUserId];
     const senderSocketId = userSockets[senderUserId];
 
-    if (receiverSocketId && senderUserId !== receiverUserId) {
+    if (receiverSocketId && senderUserId != receiverUserId) {
       const notification = await notificationModel.create({
         sender_id: senderUserId,
         username: data.senderName,
@@ -381,7 +381,7 @@ io.on("connection", (socket) => {
     const receiverSocketId = userSockets[receiverUserId];
     const senderSocketId = userSockets[senderUserId];
 
-    if (receiverSocketId && senderUserId !== receiverUserId) {
+    if (receiverSocketId && senderUserId != receiverUserId) {
       const notification = await notificationModel.create({
         sender_id: senderUserId,
         username: data.senderName,
@@ -427,7 +427,7 @@ io.on("connection", (socket) => {
     const senderSocketId = userSockets[senderUserId];
 
     try {
-      if (receiverSocketId && senderUserId !== receiverUserId) {
+      if (receiverSocketId && senderUserId != receiverUserId) {
         const notification = await notificationModel.create({
           sender_id: senderUserId,
           username: data.senderName,
@@ -476,7 +476,7 @@ io.on("connection", (socket) => {
     const senderSocketId = userSockets[senderUserId];
 
     try {
-      if (receiverSocketId && senderUserId !== receiverUserId) {
+      if (receiverSocketId && senderUserId != receiverUserId) {
         const notification = await notificationModel.create({
           sender_id: senderUserId,
           username: data.senderName,
