@@ -427,16 +427,16 @@ io.on("connection", (socket) => {
     const senderSocketId = userSockets[senderUserId];
 
     if (receiverSocketId && senderUserId !== receiverUserId) {
-      const notification = await notificationModel.create({
-        sender_id: senderUserId,
-        username: data.senderName,
-        profilePicture: data.profilePicture,
-        receiver_id: receiverUserId,
-        message: data.message,
-        action_type: "job_post_apply",
-        post_id: data.jobPostId,
-        is_seen: false,
-      });
+      // const notification = await notificationModel.create({
+      //   sender_id: senderUserId,
+      //   username: data.senderName,
+      //   profilePicture: data.profilePicture,
+      //   receiver_id: receiverUserId,
+      //   message: data.message,
+      //   action_type: "job_post_apply",
+      //   post_id: data.jobPostId,
+      //   is_seen: false,
+      // });
 
       io.to(receiverSocketId).emit("newNotification", {
         sender_id: senderUserId,
@@ -470,16 +470,16 @@ io.on("connection", (socket) => {
     const senderSocketId = userSockets[senderUserId];
 
     if (receiverSocketId && senderUserId !== receiverUserId) {
-      const notification = await notificationModel.create({
-        sender_id: senderUserId,
-        username: data.senderName,
-        profilePicture: data.profilePicture,
-        receiver_id: receiverUserId,
-        message: data.message,
-        action_type: "job_post_apply",
-        post_id: data.jobPostId,
-        is_seen: false,
-      });
+      // const notification = await notificationModel.create({
+      //   sender_id: senderUserId,
+      //   username: data.senderName,
+      //   profilePicture: data.profilePicture,
+      //   receiver_id: receiverUserId,
+      //   message: data.message,
+      //   action_type: "job_post_apply",
+      //   post_id: data.jobPostId,
+      //   is_seen: false,
+      // });
 
       io.to(receiverSocketId).emit("newNotification", {
         sender_id: senderUserId,
